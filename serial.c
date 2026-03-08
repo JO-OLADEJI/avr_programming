@@ -22,10 +22,16 @@ void UART_TRANSMIT(uint8_t data) {
 
 int main() {
   UART_INIT();
+  // uint8_t data = 195;
+
+  // while (1) {
+  //   UART_TRANSMIT(data);
+  // }
+
   uint8_t temp;
 
-  DDRC = 0x00;
-  DDRC |= 0x01 << DDC0;
+  DDRB = 0b00111111;
+  DDRC = 0b00110000;
 
   // Rx
   while (1) {
@@ -34,6 +40,10 @@ int main() {
       // 1. read the value of UDR0
       temp = UDR0;
 
+      // show it on the LEDs
+      PORTB = DDRB & temp;
+      PORTC = DDRC & (temp >> 0x02);
+
       // 2. write that value back to UDR0
       UART_TRANSMIT(temp);
     }
@@ -41,3 +51,5 @@ int main() {
 
   return 0;
 }
+
+// 1111 01000010 01000000
